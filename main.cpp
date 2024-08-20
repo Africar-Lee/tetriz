@@ -1,38 +1,9 @@
-#include <iostream>
-#include <thread>
-#include <chrono>
-#include <termios.h>
+#include "define.h"
 #include "terminal.h"
 #include "utils.h"
 #include "draw.h"
-
-using namespace std::chrono_literals;
-
-char command = 0;
-
-char getch()
-{
-    char c{};
-    struct termios old, cur;
-    tcgetattr(0, &cur);
-    old = cur;
-    cfmakeraw(&cur);
-    tcsetattr(0, 0, &cur);
-    c = getchar();
-    tcsetattr(0, 0, &old);
-
-    return c;
-}
-
-void key_event()
-{
-    while (true)
-    {
-        command = getch();
-        if (command == 'q')
-            break;
-    }
-}
+#include "control.h"
+#include "game.h"
 
 void init()
 {
@@ -45,25 +16,23 @@ void init()
     dw::window(19, 22, 8, 4, "Info");
     dw::window(1, 22, 8, 18, "Next");
 
-    std::thread t(key_event);
-    t.detach();
+    gm::start_listener();
+    gm::init();
 }
 
 void loop()
 {
     int i = 1;
-    while (true)
+    while (gm::running)
     {
 
         tc::cursor_move_to(10, 4);
         std::cout << "FPS : " << ut::fps();
 
-        tc::cursor_move_to(5, 10);
+        tc::cursor_move_to(gm::cursor_row, ut::b2c(gm::cursor_col));
         tc::set_back_color(15);
         std::cout << "  " << std::flush;
         tc::reset_color();
-
-        if (command == 'q') break;
 
         std::this_thread::sleep_for(100ms);
     }
@@ -71,6 +40,7 @@ void loop()
 
 void exit()
 {
+    gm::quit();
     tc::show_cursor();
     tc::reset_color();
     tc::clean_screen();

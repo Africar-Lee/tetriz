@@ -1,6 +1,7 @@
 #include "draw.h"
 #include "terminal.h"
-#include <iostream>
+#include "define.h"
+#include "utils.h"
 
 /**
  *  	0	1	2	3	4	5	6	7	8	9	A	B	C	D	E	F
@@ -15,16 +16,11 @@ U+257x	╰	╱	╲	╳	╴	╵	╶	╷	╸	╹	╺	╻	╼	╽	╾	╿
  */
 namespace dw
 {
-    inline int block2col(int b)
-    {
-        return 2 * b - 1;
-    }
-
     void window(int top, int left, int width, int height, std::string title)
     {
         for (int r = 0; r < height; ++r)
         {
-            tc::cursor_move_to(top + r, block2col(left));
+            tc::cursor_move_to(top + r, ut::b2c(left));
             for (int c = 0; c < width; ++c)
             {
                 if (r == 0) // 第一行
@@ -75,7 +71,7 @@ namespace dw
             }
         }
         // title
-        tc::cursor_move_to(top, block2col(left) + (width * 2 - title.length()) / 2 - 1);
+        tc::cursor_move_to(top, ut::b2c(left) + (width * 2 - title.length()) / 2 - 1);
         std::cout << "[" << title << "]";
     }
 } // namespace dw
