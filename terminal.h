@@ -1,3 +1,4 @@
+# pragma once
 namespace tc { // terminal control
 
     void cursor_move_to(int row, int col);
