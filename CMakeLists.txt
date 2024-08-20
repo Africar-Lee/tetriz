@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.26.0)
+cmake_minimum_required(VERSION 3.26)
 project(tetriz)
 
 set(CXX_STANDARD 20)
