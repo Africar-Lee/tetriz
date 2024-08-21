@@ -3,6 +3,8 @@ namespace gm{
     bool running;
     int cursor_row, cursor_col;
 
+    Tetromino cur_tetro;
+
     void quit()
     {
         running = false;
@@ -13,11 +15,12 @@ namespace gm{
         running = true;
         cursor_row = 2;
         cursor_col = 15;
+        cur_tetro = S;
     }
 
     void rotate()
     {
-        cursor_row--;
+        cur_tetro = rotate(cur_tetro);
     }
 
     void left()

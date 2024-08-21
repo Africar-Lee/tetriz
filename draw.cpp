@@ -71,7 +71,29 @@ namespace dw
             }
         }
         // title
-        tc::cursor_move_to(top, ut::b2c(left) + (width * 2 - title.length()) / 2 - 1);
-        std::cout << "[" << title << "]";
+        tc::cursor_move_to(top, ut::b2c(left) + (width * 2 - title.length()) / 2);
+        std::cout << title;
+    }
+
+    void tetromino(gm::Tetromino &t, int top, int left)
+    {
+        tc::cursor_move_to(top, ut::b2c(left));
+        for (int i = 0; i < t.size(); ++i)
+        {
+            tc::cursor_move_to(top + i, ut::b2c(left));
+            for (int j = 0; j < t[0].size(); ++j)
+            {
+                if (t[i][j] > 0)
+                {
+                    tc::set_back_color((int)(gm::tetro_color[t[i][j]]));
+                    std::cout << "  ";
+                }
+                else
+                {
+                    tc::reset_color();
+                    std::cout << "  ";
+                }
+            }
+        }
     }
 } // namespace dw

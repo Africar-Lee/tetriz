@@ -34,7 +34,8 @@ namespace gm
         while (running)
         {
             command = getch();
-            comm_func[command]();
+            if (comm_func.count(command) != 0)
+                comm_func[command]();
         }
     }
     void start_listener()

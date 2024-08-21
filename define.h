@@ -5,6 +5,7 @@
 #include <chrono>
 #include <termios.h>
 #include <map>
+#include <vector>
 #include <string>
 #include <functional>
 #include <locale>
