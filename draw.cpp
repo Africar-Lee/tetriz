@@ -75,9 +75,8 @@ namespace dw
         std::cout << title;
     }
 
-    void tetromino(gm::Tetromino &t, int top, int left)
+    void tetromino(gm::Tetromino_matix &t, int top, int left)
     {
-        tc::cursor_move_to(top, ut::b2c(left));
         for (int i = 0; i < t.size(); ++i)
         {
             tc::cursor_move_to(top + i, ut::b2c(left));
@@ -94,6 +93,40 @@ namespace dw
                     std::cout << "  ";
                 }
             }
+        }
+    }
+
+    void tetromino(gm::Tetromino_set &t, int top, int left, int index)
+    {
+        for (int i = 0; i < 4; ++i)
+        {
+            tc::cursor_move_to(top + i, ut::b2c(left));
+            for (int j = 0; j < 4; ++j)
+            {
+                if (gm::get_bit(t[index], i, j)){
+                    tc::set_back_color((t[index] >> 16) & 0xff);
+                    std::cout << "  ";
+                }
+                else{
+                    tc::reset_color();
+                    std::cout << "  ";
+                }
+            }
+        }
+    }
+
+    void tetromino(gm::Tetromino_axis &t, int top, int left, int index)
+    {
+        tc::cursor_move_to(top, ut::b2c(left));
+        tc::set_back_color(t[index][0].second);
+        std::cout << "  ";
+        for (auto p:t[index]){
+            if (p.first > 'A') continue;
+            // (dx, dy) -> (row, col)
+            // row = row - dy
+            // col = col + dx
+            tc::cursor_move_to(top - p.second , ut::b2c(left + p.first));
+            std::cout << "  ";
         }
     }
 } // namespace dw

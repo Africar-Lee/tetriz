@@ -6,7 +6,10 @@ namespace gm{
     extern bool running;
     extern int cursor_row, cursor_col;
 
-    extern Tetromino cur_tetro;
+    extern Tetromino_matix cur_tetro;
+    extern Tetromino_set cur_tetro_set;
+    extern Tetromino_axis cur_tetro_pre;
+    extern int cur_index;
 
     void quit();
 
