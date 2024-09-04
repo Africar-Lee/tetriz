@@ -129,4 +129,41 @@ namespace dw
             std::cout << "  ";
         }
     }
+
+    void frame(Matrix &frame, int top, int left)
+    {
+        static Matrix buffer(frame.size(), std::vector<int>(frame[0].size(), -1));
+        // frame xy -------> row/col
+        int row, col;
+        for (int x = 0; x < 10; ++x)
+        {
+            for (int y = 0; y < 20; ++y)
+            {
+                if (buffer[x][y] == frame[x][y]) continue;
+                buffer[x][y] = frame[x][y];
+
+                row = top + 20 - y - 1;
+                col = left + x;
+                
+                tc::cursor_move_to(row, ut::b2c(col));
+                if (frame[x][y] > 0)        // 正常块
+                {
+                    tc::reset_color();
+                    tc::set_back_color(frame[x][y]);
+                    std::cout << "  ";
+                }
+                else if (frame[x][y] < 0)   // 阴影块
+                {
+                    tc::reset_color();
+                    tc::set_fore_color(0 - frame[x][y]);
+                    std::cout << "\u25E3\u25E5";
+                }
+                else                        // 空白区
+                {
+                    tc::reset_color();
+                    std::cout << "\u30FB";
+                }
+            }
+        }
+    }
 } // namespace dw

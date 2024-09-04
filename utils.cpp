@@ -21,3 +21,16 @@ int ut::fps()
 
     return fps;
 }
+
+bool ut::timer(std::chrono::microseconds msec)
+{
+    static auto start = std::chrono::steady_clock::now();
+    auto end = std::chrono::steady_clock::now();
+
+    if ((end - start) > msec)
+    {
+        start = end;
+        return true;
+    }
+    return false;
+}

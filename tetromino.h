@@ -3,9 +3,6 @@
 #include "define.h"
 #include "color.h"
 
-#define TMN_STAT_NUM 4
-#define BLKS_PER_TMN 4
-
 namespace gm
 {
     using Tetromino_matix = std::vector<std::vector<int>>;

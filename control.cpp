@@ -51,8 +51,8 @@ namespace gm
 
     void comm_rotate()
     {
-        // rotate();
-        cur_index = (cur_index + 1) % 4;
+        rotate();
+        // cur_index = (cur_index + 1) % 4;
     }
 
     void comm_left()

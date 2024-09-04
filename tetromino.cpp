@@ -96,9 +96,51 @@ namespace gm
      *
      * */
     Tetromino_axis I_pre = {{
-        {{{'I', (int)Color::Cyan}, {-1, 0}, {1, 0}, {2, 0}}},
-        {{{'I', (int)Color::Cyan}, {0, 1}, {0, -1}, {0, -2}}},
-        {{{'I', (int)Color::Cyan}, {-2, 0}, {-1, 0}, {1, 0}}},
-        {{{'I', (int)Color::Cyan}, {0, 2}, {0, 1}, {0, -1}}},
+        {{{'I', (int)Color::Cyan}, {-1, 0}, {1, 0}, {2, 0}}},       // 0
+        {{{'I', (int)Color::Cyan}, {0, 1}, {0, -1}, {0, -2}}},      // R
+        {{{'I', (int)Color::Cyan}, {-2, 0}, {-1, 0}, {1, 0}}},      // 2L
+        {{{'I', (int)Color::Cyan}, {0, 2}, {0, 1}, {0, -1}}},       // L
+    }};
+
+    Tetromino_axis J_pre = {{
+        {{{'J', (int)Color::Red}, {-1, 0}, {-1, 1}, {1, 0}}},       // 0
+        {{{'J', (int)Color::Red}, {0, 1}, {0, -1}, {1, 1}}},        // R
+        {{{'J', (int)Color::Red}, {1, -1}, {-1, 0}, {1, 0}}},       // 2L
+        {{{'J', (int)Color::Red}, {0, 1}, {0, -1}, {-1, -1}}},      // L
+    }};
+
+    Tetromino_axis L_pre = {{
+        {{{'L', (int)Color::Orange}, {-1, 0}, {1, 0}, {1, 1}}},     // 0
+        {{{'L', (int)Color::Orange}, {0, 1}, {0, -1}, {1, -1}}},    // R
+        {{{'L', (int)Color::Orange}, {-1, 0}, {1, 0}, {-1, -1}}},   // 2L
+        {{{'L', (int)Color::Orange}, {0, 1}, {0, -1}, {-1, 1}}},    // L
+    }};
+
+    Tetromino_axis O_pre = {{
+        {{{'O', (int)Color::Yellow}, {1, 0}, {0, 1}, {1, 1}}},      // 0
+        {{{'O', (int)Color::Yellow}, {1, 0}, {0, -1}, {1, -1}}},    // R
+        {{{'O', (int)Color::Yellow}, {-1, 0}, {0, -1}, {-1, -1}}},  // 2L
+        {{{'O', (int)Color::Yellow}, {-1, 0}, {0, 1}, {-1, 1}}},    // L
+    }};
+
+    Tetromino_axis S_pre = {{
+        {{{'S', (int)Color::Green}, {-1, 0}, {0, 1}, {1, 1}}},      // 0
+        {{{'S', (int)Color::Green}, {0, 1}, {1, 0}, {1, -1}}},      // R
+        {{{'S', (int)Color::Green}, {1, 0}, {0, -1}, {-1, -1}}},    // 2L
+        {{{'S', (int)Color::Green}, {0, -1}, {-1, 0}, {-1, 1}}},    // L
+    }};
+
+    Tetromino_axis T_pre = {{
+        {{{'T', (int)Color::Blue}, {-1, 0}, {1, 0}, {0, 1}}},       // 0
+        {{{'T', (int)Color::Blue}, {0, 1}, {0, -1}, {1, 0}}},       // R
+        {{{'T', (int)Color::Blue}, {1, 0}, {-1, 0}, {0, -1}}},      // 2L
+        {{{'T', (int)Color::Blue}, {0, 1}, {0, -1}, {-1, 0}}},      // L
+    }};
+
+    Tetromino_axis Z_pre = {{
+        {{{'Z', (int)Color::Purple}, {-1, 1}, {0, 1}, {1, 0}}},     // 0
+        {{{'Z', (int)Color::Purple}, {1, 1}, {1, 0}, {0, -1}}},     // R
+        {{{'Z', (int)Color::Purple}, {-1, 1}, {0, 1}, {1, 0}}},     // 2L
+        {{{'Z', (int)Color::Purple}, {-1, -1}, {-1, 0}, {0, 1}}},   // L
     }};
 }

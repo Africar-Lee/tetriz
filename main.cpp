@@ -12,6 +12,15 @@ void init()
 
     gm::start_listener();
     gm::init();
+
+    setbuf(stdout, nullptr);
+
+    tc::clean_screen();
+    dw::window(1, 1, 9, 6, "Hold");
+    dw::window(1, 10, 12, 22, "Tetriz");
+    dw::window(7, 1, 9, 16, "Status");
+    dw::window(19, 22, 8, 4, "Info");
+    dw::window(1, 22, 8, 18, "Next");
 }
 
 void loop()
@@ -19,26 +28,23 @@ void loop()
     int i = 1;
     while (gm::running)
     {
-        tc::clean_screen();
-        dw::window(1, 1, 9, 6, "Hold");
-        dw::window(1, 10, 12, 22, "Tetriz");
-        dw::window(7, 1, 9, 16, "Status");
-        dw::window(19, 22, 8, 4, "Info");
-        dw::window(1, 22, 8, 18, "Next");
+        gm::process();
 
         tc::cursor_move_to(10, 4);
         std::cout << "FPS : " << ut::fps();
 
-        tc::cursor_move_to(gm::cursor_row, ut::b2c(gm::cursor_col));
+        dw::frame(gm::render_frame, 2, 11);
+
+        // tc::cursor_move_to(gm::cursor_row, ut::b2c(gm::cursor_col));
         // tc::set_back_color(15);
         // std::cout << "  " << std::flush;
         // dw::tetromino(gm::cur_tetro, gm::cursor_row, gm::cursor_col);
         // dw::tetromino(gm::cur_tetro_set, gm::cursor_row, gm::cursor_col, gm::cur_index);
-        dw::tetromino(gm::cur_tetro_pre, gm::cursor_row, gm::cursor_col, gm::cur_index);
+        // dw::tetromino(gm::cur_tetro_pre, gm::cursor_row, gm::cursor_col, gm::cur_index);
         tc::reset_color();
 
         std::cout << std::flush;
-        std::this_thread::sleep_for(100ms);
+        std::this_thread::sleep_for(10ms);
     }
 }
 
