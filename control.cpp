@@ -13,6 +13,7 @@ namespace gm
             {KEY_A, comm_left},
             {KEY_D, comm_right},
             {KEY_S, comm_down},
+            {KEY_SPAC, comm_drop},
         };
 
     char getch()
@@ -68,5 +69,10 @@ namespace gm
     void comm_down()
     {
         down();
+    }
+
+    void comm_drop()
+    {
+        drop();
     }
 }

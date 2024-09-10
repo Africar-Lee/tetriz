@@ -1,49 +1,59 @@
 #include "piece.h"
+#include "game.h"
 
 namespace gm
 {
-    Piece::Piece(Tetromino_axis &t, int x0, int y0, int i) : tetro_set(t), x(x0), y(y0), index(i)
+    Piece::Piece(Tetromino_axis &t, int x0, int y0, int i)
+    :   tetro_set(t),
+        x(x0),
+        y(y0),
+        index(i),
+        sp_playfield(std::make_shared<Matrix>(playfield)),
+        status(1)
     {
     }
 
-    void Piece::down()
+    bool Piece::down()
     {
-        move(0, -1);
+        return move(0, -1);
     }
 
-    void Piece::left()
+    bool Piece::left()
     {
-        move(-1, 0);
+        return move(-1, 0);
     }
 
-    void Piece::right()
+    bool Piece::right()
     {
-        move(1, 0);
+        return move(1, 0);
     }
 
-    void Piece::rotate()
+    bool Piece::rotate()
     {
-        index = (index + 1) % 4;
+        int new_index = (index + 1) % 4;
+        Piece new_piece(tetro_set, x, y, new_index);
+        if (new_piece.test(x, y))
+        {
+            index = new_index;
+            return true;
+        }
+
+        return false;
     }
 
-    void Piece::set_playfield(std::shared_ptr<Matrix> p)
-    {
-        sp_playfield = p;
-    }
-
-    bool Piece::test(int ox, int oy)
+    bool Piece::test(int ox, int oy) const
     {
         assert(sp_playfield != nullptr);
         for (int i = 0; i < 4; ++i)
         {
             auto [dx, dy] = get_mino(i);
             // 1. 越界判断
-            if ((ox + dx) < 0 || (ox + dx) > sp_playfield->size() - 1 || (oy + dy) < 0 || (oy + dy) > (*sp_playfield)[0].size() - 1)
+            if ((ox + dx) < 0 || (ox + dx) > (*sp_playfield)[0].size() - 1 || (oy + dy) < 0 || (oy + dy) > (*sp_playfield).size() - 1)
             {
                 return false;
             }
             // 有方块判断
-            if ((*sp_playfield)[ox + dx][oy + dy] > 0)
+            if ((*sp_playfield)[oy + dy][ox + dx] > 0)
             {
                 return false;
             }
@@ -51,16 +61,16 @@ namespace gm
         return true;
     }
 
-    void Piece::move(int dx, int dy)
+    bool Piece::move(int dx, int dy)
     {
         if (!test(x + dx, y + dy))
-            return;
+            return false;
         x += dx;
         y += dy;
-        return;
+        return true;
     }
 
-    std::pair<int, int> Piece::get_mino(int i)
+    std::pair<int, int> Piece::get_mino(int i) const
     {
         assert(i >= 0 && i <= 3);
         if (i == 0)
@@ -68,13 +78,18 @@ namespace gm
         return tetro_set[index][i];
     }
 
-    std::pair<int, int> Piece::get_xy()
+    std::pair<int, int> Piece::get_xy() const
     {
         return {x, y};
     }
 
-    int Piece::get_color()
+    int Piece::get_color() const
     {
-        return tetro_set[index][0].second;
+        return status ? tetro_set[index][0].second : 0 - tetro_set[index][0].second;
+    }
+
+    void Piece::set_ghost()
+    {
+        status = 0;
     }
 } // namespace gm

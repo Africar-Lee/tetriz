@@ -34,13 +34,8 @@ void loop()
         std::cout << "FPS : " << ut::fps();
 
         dw::frame(gm::render_frame, 2, 11);
+        dw::next(gm::next, 2, 23);
 
-        // tc::cursor_move_to(gm::cursor_row, ut::b2c(gm::cursor_col));
-        // tc::set_back_color(15);
-        // std::cout << "  " << std::flush;
-        // dw::tetromino(gm::cur_tetro, gm::cursor_row, gm::cursor_col);
-        // dw::tetromino(gm::cur_tetro_set, gm::cursor_row, gm::cursor_col, gm::cur_index);
-        // dw::tetromino(gm::cur_tetro_pre, gm::cursor_row, gm::cursor_col, gm::cur_index);
         tc::reset_color();
 
         std::cout << std::flush;

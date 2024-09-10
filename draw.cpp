@@ -2,6 +2,9 @@
 #include "terminal.h"
 #include "define.h"
 #include "utils.h"
+#include "piece.h"
+#include "tetromino.h"
+#include "game.h"
 
 /**
  *  	0	1	2	3	4	5	6	7	8	9	A	B	C	D	E	F
@@ -103,11 +106,13 @@ namespace dw
             tc::cursor_move_to(top + i, ut::b2c(left));
             for (int j = 0; j < 4; ++j)
             {
-                if (gm::get_bit(t[index], i, j)){
+                if (gm::get_bit(t[index], i, j))
+                {
                     tc::set_back_color((t[index] >> 16) & 0xff);
                     std::cout << "  ";
                 }
-                else{
+                else
+                {
                     tc::reset_color();
                     std::cout << "  ";
                 }
@@ -120,48 +125,74 @@ namespace dw
         tc::cursor_move_to(top, ut::b2c(left));
         tc::set_back_color(t[index][0].second);
         std::cout << "  ";
-        for (auto p:t[index]){
-            if (p.first > 'A') continue;
+        for (auto p : t[index])
+        {
+            if (p.first > 'A')
+                continue;
             // (dx, dy) -> (row, col)
             // row = row - dy
             // col = col + dx
-            tc::cursor_move_to(top - p.second , ut::b2c(left + p.first));
+            tc::cursor_move_to(top - p.second, ut::b2c(left + p.first));
             std::cout << "  ";
         }
+    }
+
+    void next(std::queue<gm::Tetromino_axis> next5, int top, int left)
+    {
+        static Matrix buffer(15, std::vector<int>(6, -1));
+        Matrix next_field(15, std::vector<int>(6, 0));
+        for (int y_pos = 13; !next5.empty(); y_pos -= 3)
+        {
+            gm::Piece p(next5.front(), 2, y_pos, 0);
+            gm::merge(next_field, p);
+
+            next5.pop();
+        }
+
+        matrix(next_field, top, left, &buffer);
     }
 
     void frame(Matrix &frame, int top, int left)
     {
         static Matrix buffer(frame.size(), std::vector<int>(frame[0].size(), -1));
-        // frame xy -------> row/col
-        int row, col;
-        for (int x = 0; x < 10; ++x)
-        {
-            for (int y = 0; y < 20; ++y)
-            {
-                if (buffer[x][y] == frame[x][y]) continue;
-                buffer[x][y] = frame[x][y];
+        Matrix tmp_frame(frame.begin(), frame.begin() + 20);
+        matrix(tmp_frame, top, left, &buffer, "\u30FB");
+    }
 
-                row = top + 20 - y - 1;
+    void matrix(Matrix &m, int top, int left, Matrix *buffer, std::string blank)
+    {
+        int row, col;
+        for (int y = 0; y < m.size(); ++y)
+        {
+            for (int x = 0; x < m[0].size(); ++x)
+            {
+                if (buffer != nullptr)
+                {
+                    if ((*buffer)[y][x] == m[y][x])
+                        continue;
+                    (*buffer)[y][x] = m[y][x];
+                }
+
+                row = top + m.size() - y - 1;
                 col = left + x;
-                
+
                 tc::cursor_move_to(row, ut::b2c(col));
-                if (frame[x][y] > 0)        // 正常块
+                if (m[y][x] > 0) // 正常块
                 {
                     tc::reset_color();
-                    tc::set_back_color(frame[x][y]);
+                    tc::set_back_color(m[y][x]);
                     std::cout << "  ";
                 }
-                else if (frame[x][y] < 0)   // 阴影块
+                else if (m[y][x] < 0) // 阴影块
                 {
                     tc::reset_color();
-                    tc::set_fore_color(0 - frame[x][y]);
+                    tc::set_fore_color(0 - m[y][x]);
                     std::cout << "\u25E3\u25E5";
                 }
-                else                        // 空白区
+                else // 空白区
                 {
                     tc::reset_color();
-                    std::cout << "\u30FB";
+                    std::cout << blank;
                 }
             }
         }
