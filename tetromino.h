@@ -20,6 +20,11 @@ namespace gm
     bool get_bit(int t, int i, int j);
 
     //--------------------------------------------------
-    using Tetromino_axis = std::array<std::array<std::pair<int, int>, BLKS_PER_TMN>, TMN_STAT_NUM>;
+    // using Tetromino_axis = std::array<std::array<std::pair<int, int>, BLKS_PER_TMN>, TMN_STAT_NUM>;
     extern Tetromino_axis I_pre, J_pre, L_pre, O_pre, S_pre, T_pre, Z_pre;
+
+
+    //===========================================================
+    extern Offset offset, offset_i, offset_o;
+
 }

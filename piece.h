@@ -14,8 +14,7 @@ namespace gm
         bool down();
         bool left();
         bool right();
-        bool rotate();
-
+        bool rotate(int direct);
 
         std::pair<int, int> get_mino(int i) const;
 
@@ -30,16 +29,14 @@ namespace gm
     private:
         bool move(int dx, int dy);
 
+        char get_type() const;
+
         Tetromino_axis tetro_set;
-        int index;  // [0, R, 2L, L]
+        int index; // [0, R, 2L, L]
         int x, y;
         int status; // 0:阴影状态，1:正常块
         std::shared_ptr<Matrix> sp_playfield;
+        Offset offset; // 踢墙表
     };
-    // extern int cursor_row, cursor_col;
 
-    // // extern Tetromino_matix cur_tetro;
-    // // extern Tetromino_set cur_tetro_set;
-    // extern Tetromino_axis cur_tetro_pre;
-    // extern int cur_index;
-}
+} // namespace gm

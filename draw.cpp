@@ -120,7 +120,7 @@ namespace dw
         }
     }
 
-    void tetromino(gm::Tetromino_axis &t, int top, int left, int index)
+    void tetromino(Tetromino_axis &t, int top, int left, int index)
     {
         tc::cursor_move_to(top, ut::b2c(left));
         tc::set_back_color(t[index][0].second);
@@ -137,7 +137,7 @@ namespace dw
         }
     }
 
-    void next(std::queue<gm::Tetromino_axis> next5, int top, int left)
+    void next(std::queue<Tetromino_axis> next5, int top, int left)
     {
         static Matrix buffer(15, std::vector<int>(6, -1));
         Matrix next_field(15, std::vector<int>(6, 0));

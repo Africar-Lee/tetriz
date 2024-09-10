@@ -39,7 +39,7 @@ namespace gm
 
     void drop(); // 直落
 
-    void rotate();
+    void rotate(int direct);
 
     void left();
 
@@ -48,6 +48,8 @@ namespace gm
     void down();
 
     void preview(); // 生成预览队列
+
+    void load();    //载入预设地图
 
     //---------- tool --------------
     void merge(Matrix &m, const Piece &p);

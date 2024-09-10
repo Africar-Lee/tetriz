@@ -24,6 +24,7 @@ namespace gm
         duration = 500ms;
 
         playfield = Matrix(PLY_FLD_ROWS, std::vector<int>(PLY_FLD_COLS, 0));
+        load();
         preview();
 
         one_piece = pick();
@@ -115,9 +116,9 @@ namespace gm
         }
     }
 
-    void rotate()
+    void rotate(int direct)
     {
-        one_piece.rotate();
+        one_piece.rotate(direct);
     }
 
     void left()
@@ -147,6 +148,26 @@ namespace gm
             if (bag.empty())
                 bag = {I_pre, J_pre, L_pre, O_pre, S_pre, T_pre, Z_pre};
         }
+    }
+
+    void load()
+    {
+        std::ifstream fs("tetriz.map");
+        assert(fs.is_open());
+        std::string line;
+
+        for (auto& row:playfield | std::ranges::views::take(PLY_FLD_EX_ROWS) | std::ranges::views::reverse)
+        {
+            getline(fs, line);
+            for (auto i:iota(0, PLY_FLD_COLS))
+            {
+                if (line[i] == '1')
+                {
+                    row[i] = (int)Color::Gray;
+                }
+            }
+        }
+        fs.close();
     }
 
     void drop()

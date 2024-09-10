@@ -11,4 +11,5 @@ enum class Color
     Purple = 5,
     White = 15,
     Black = 0,
+    Gray = 7,
 };

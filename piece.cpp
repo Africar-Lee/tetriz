@@ -4,13 +4,19 @@
 namespace gm
 {
     Piece::Piece(Tetromino_axis &t, int x0, int y0, int i)
-    :   tetro_set(t),
-        x(x0),
-        y(y0),
-        index(i),
-        sp_playfield(std::make_shared<Matrix>(playfield)),
-        status(1)
+        : tetro_set(t),
+          x(x0),
+          y(y0),
+          index(i),
+          sp_playfield(std::make_shared<Matrix>(playfield)),
+          status(1)
     {
+        if (get_type() == 'I')
+            offset = gm::offset_i;
+        else if (get_type() == 'O')
+            offset = gm::offset_o;
+        else
+            offset = gm::offset;
     }
 
     bool Piece::down()
@@ -28,14 +34,25 @@ namespace gm
         return move(1, 0);
     }
 
-    bool Piece::rotate()
+    bool Piece::rotate(int direct)
     {
-        int new_index = (index + 1) % 4;
-        Piece new_piece(tetro_set, x, y, new_index);
-        if (new_piece.test(x, y))
+        assert(direct >= 1 && direct <= 3);
+        int new_index = (index + direct) % 4;
+        for (auto i:iota(0, (int)offset[0].size()))
         {
-            index = new_index;
-            return true;
+            auto [dx_ori, dy_ori] = offset[index][i];
+            auto [dx_new, dy_new] = offset[new_index][i];
+            auto dx = dx_ori - dx_new;
+            auto dy = dy_ori - dy_new;
+
+            Piece new_piece(tetro_set, x, y, new_index);
+            if (new_piece.test(x + dx, y + dy))
+            {
+                index = new_index;
+                x += dx;
+                y += dy;
+                return true;
+            }
         }
 
         return false;
@@ -68,6 +85,11 @@ namespace gm
         x += dx;
         y += dy;
         return true;
+    }
+
+    char Piece::get_type() const
+    {
+        return tetro_set[index][0].first;
     }
 
     std::pair<int, int> Piece::get_mino(int i) const

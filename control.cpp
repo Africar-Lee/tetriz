@@ -9,7 +9,9 @@ namespace gm
     std::map<char, std::function<void()>>
         comm_func{
             {KEY_Q, comm_quit},
-            {KEY_W, comm_rotate},
+            {KEY_W, comm_rotate_R},
+            {KEY_Z, comm_rotate_L},
+            {KEY_X, comm_rotate_2},
             {KEY_A, comm_left},
             {KEY_D, comm_right},
             {KEY_S, comm_down},
@@ -50,10 +52,19 @@ namespace gm
         quit();
     }
 
-    void comm_rotate()
+    void comm_rotate_R()
     {
-        rotate();
-        // cur_index = (cur_index + 1) % 4;
+        rotate(1);
+    }
+
+    void comm_rotate_L()
+    {
+        rotate(3);
+    }
+
+    void comm_rotate_2()
+    {
+        rotate(2);
     }
 
     void comm_left()
