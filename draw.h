@@ -11,6 +11,8 @@ namespace dw
 
     void next(std::queue<Tetromino_axis> next5, int top, int left);
 
+    void hold(Tetromino_axis hold_piece, int top, int left);
+
     void frame(Matrix &frame, int top, int left);
 
     void matrix(Matrix &m, int top, int left, Matrix *buffer = nullptr, std::string blank = "  ");

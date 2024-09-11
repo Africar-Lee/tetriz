@@ -129,9 +129,7 @@ namespace dw
         {
             if (p.first > 'A')
                 continue;
-            // (dx, dy) -> (row, col)
-            // row = row - dy
-            // col = col + dx
+
             tc::cursor_move_to(top - p.second, ut::b2c(left + p.first));
             std::cout << "  ";
         }
@@ -150,6 +148,20 @@ namespace dw
         }
 
         matrix(next_field, top, left, &buffer);
+    }
+
+    void hold(Tetromino_axis hold_piece, int top, int left)
+    {
+        static Matrix buffer(4, std::vector<int>(7, -1));
+        Matrix hold_field(4, std::vector<int>(7, 0));
+
+        if (hold_piece.empty()) return; // 无值时不绘制
+        gm::Piece p(hold_piece, 3, 1, 0);
+        if (gm::holding)
+            p.set_disable();
+        gm::merge(hold_field, p);
+
+        matrix(hold_field, top, left, &buffer);
     }
 
     void frame(Matrix &frame, int top, int left)

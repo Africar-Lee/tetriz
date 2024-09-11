@@ -5,12 +5,16 @@ namespace gm
 {
     bool running;
     bool locking;
+    bool holding;
 
     Piece one_piece;
+    
     Matrix playfield;
     Matrix render_frame;
 
     std::queue<Tetromino_axis> next;
+
+    Tetromino_axis hold_piece;
 
     std::chrono::microseconds duration;
 
@@ -20,6 +24,7 @@ namespace gm
 
         running = true;
         locking = false;
+        holding = false;
 
         duration = 500ms;
 
@@ -51,6 +56,7 @@ namespace gm
                 one_piece = pick(); // 前述锁定消行逻辑已完成，生成新piece
 
                 locking = false;
+                holding = false;
             }
             else
             {
@@ -168,6 +174,28 @@ namespace gm
             }
         }
         fs.close();
+    }
+
+    // 1. 如果暂存区为空，当前块放入暂存区，重新生成当前块，从头掉落
+    // 2. 如果暂存区不空，当前块放入暂存区，使用原暂存区的块，从头掉落
+    // 3. 每回合只允许使用暂存一次
+    void hold()
+    {
+        if (holding) return;
+
+        if (hold_piece.empty())
+        {
+            hold_piece = one_piece.get_tetromino();
+            one_piece = pick();
+        }
+        else
+        {
+            auto tmp = hold_piece;
+            hold_piece = one_piece.get_tetromino();
+            one_piece = Piece(tmp, 4, 20, 0);
+        }
+
+        holding = true;
     }
 
     void drop()

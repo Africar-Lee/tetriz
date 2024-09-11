@@ -22,7 +22,11 @@ namespace gm
 
         int get_color() const;
 
+        Tetromino_axis get_tetromino() const;
+
         void set_ghost();
+
+        void set_disable();
 
         bool test(int x, int y) const;
 
@@ -34,7 +38,7 @@ namespace gm
         Tetromino_axis tetro_set;
         int index; // [0, R, 2L, L]
         int x, y;
-        int status; // 0:阴影状态，1:正常块
+        int status; // 0:阴影状态，1:正常块，2:不可用
         std::shared_ptr<Matrix> sp_playfield;
         Offset offset; // 踢墙表
     };

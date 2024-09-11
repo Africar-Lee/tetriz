@@ -38,7 +38,7 @@ namespace gm
     {
         assert(direct >= 1 && direct <= 3);
         int new_index = (index + direct) % 4;
-        for (auto i:iota(0, (int)offset[0].size()))
+        for (auto i : iota(0, (int)offset[0].size()))
         {
             auto [dx_ori, dy_ori] = offset[index][i];
             auto [dx_new, dy_new] = offset[new_index][i];
@@ -107,11 +107,23 @@ namespace gm
 
     int Piece::get_color() const
     {
+        if (status == 2)
+            return (int)Color::White;
         return status ? tetro_set[index][0].second : 0 - tetro_set[index][0].second;
+    }
+
+    Tetromino_axis Piece::get_tetromino() const
+    {
+        return tetro_set;
     }
 
     void Piece::set_ghost()
     {
         status = 0;
+    }
+
+    void Piece::set_disable()
+    {
+        status = 2;
     }
 } // namespace gm

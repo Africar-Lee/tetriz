@@ -17,4 +17,5 @@ namespace gm
     void comm_right();
     void comm_down();
     void comm_drop();
+    void comm_hold();
 } // namespace gm

@@ -10,8 +10,8 @@ void init()
 {
     tc::hide_cursor();
 
-    gm::start_listener();
     gm::init();
+    gm::start_listener();
 
     setbuf(stdout, nullptr);
 
@@ -35,6 +35,7 @@ void loop()
 
         dw::frame(gm::render_frame, 2, 11);
         dw::next(gm::next, 2, 23);
+        dw::hold(gm::hold_piece, 2, 2);
 
         tc::reset_color();
 

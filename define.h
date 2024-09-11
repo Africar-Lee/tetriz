@@ -23,6 +23,7 @@
 #define KEY_SPAC    ' '
 #define KEY_Z       'z'
 #define KEY_X       'x'
+#define KEY_H       'h'
 
 #define TMN_STAT_NUM 4
 #define BLKS_PER_TMN 4
@@ -32,6 +33,6 @@
 
 using namespace std::chrono_literals;
 using Matrix = std::vector<std::vector<int>>;
-using Tetromino_axis = std::array<std::array<std::pair<int, int>, BLKS_PER_TMN>, TMN_STAT_NUM>;
+using Tetromino_axis = std::vector<std::vector<std::pair<int, int>>>;
 using Offset = std::vector<std::vector<std::pair<int, int>>>;
 using std::ranges::views::iota;
