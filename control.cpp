@@ -16,9 +16,12 @@ namespace gm
             {KEY_D, comm_right},
             {KEY_S, comm_down},
             {KEY_SPAC, comm_drop},
-            {KEY_H, comm_hold},
+            {KEY_C, comm_hold},
+            {KEY_R, comm_reset},
+            {KEY_H, comm_help},
         };
 
+#ifdef __linux__
     char getch()
     {
         char c{};
@@ -32,6 +35,7 @@ namespace gm
 
         return c;
     }
+#endif // __linux__
 
     void key_event()
     {
@@ -91,5 +95,15 @@ namespace gm
     void comm_hold()
     {
         hold();
+    }
+
+    void comm_reset()
+    {
+        reset();
+    }
+
+    void comm_help()
+    {
+        help();
     }
 }

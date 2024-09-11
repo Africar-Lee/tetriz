@@ -15,6 +15,10 @@ namespace gm
 
     extern bool ending; // 终结标识
 
+    extern bool resetting; // 重置标识
+
+    extern bool helping; // 帮助标识
+
     extern Piece one_piece; // 当前在下落的块
 
     // playfield[x][y], x = 0-9, y = 0-21
@@ -64,6 +68,10 @@ namespace gm
     void hold(); // 暂存游戏
 
     void levelup(); // 升级
+
+    void reset(); // 重新开始游戏
+
+    void help(); // 显示帮助
 
     //---------- tool --------------
     void merge(Matrix &m, const Piece &p);

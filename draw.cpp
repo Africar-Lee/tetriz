@@ -78,48 +78,6 @@ namespace dw
         std::cout << title;
     }
 
-    void tetromino(gm::Tetromino_matix &t, int top, int left)
-    {
-        for (int i = 0; i < t.size(); ++i)
-        {
-            tc::cursor_move_to(top + i, ut::b2c(left));
-            for (int j = 0; j < t[0].size(); ++j)
-            {
-                if (t[i][j] > 0)
-                {
-                    tc::set_back_color((int)(gm::tetro_color[t[i][j]]));
-                    std::cout << "  ";
-                }
-                else
-                {
-                    tc::reset_color();
-                    std::cout << "  ";
-                }
-            }
-        }
-    }
-
-    void tetromino(gm::Tetromino_set &t, int top, int left, int index)
-    {
-        for (int i = 0; i < 4; ++i)
-        {
-            tc::cursor_move_to(top + i, ut::b2c(left));
-            for (int j = 0; j < 4; ++j)
-            {
-                if (gm::get_bit(t[index], i, j))
-                {
-                    tc::set_back_color((t[index] >> 16) & 0xff);
-                    std::cout << "  ";
-                }
-                else
-                {
-                    tc::reset_color();
-                    std::cout << "  ";
-                }
-            }
-        }
-    }
-
     void tetromino(Tetromino_axis &t, int top, int left, int index)
     {
         tc::cursor_move_to(top, ut::b2c(left));
@@ -167,6 +125,10 @@ namespace dw
     void frame(Matrix &frame, int top, int left)
     {
         static Matrix buffer(frame.size(), std::vector<int>(frame[0].size(), -1));
+        if (gm::resetting)
+        {
+            buffer = Matrix(frame.size(), std::vector<int>(frame[0].size(), -1));
+        }
         Matrix tmp_frame(frame.begin(), frame.begin() + 20);
         matrix(tmp_frame, top, left, &buffer, "\u30FB");
     }

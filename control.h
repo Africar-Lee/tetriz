@@ -3,7 +3,9 @@
 namespace gm
 {
     extern char command;
+#ifdef __linux__
     char getch();
+#endif
 
     void key_event();
 
@@ -18,4 +20,6 @@ namespace gm
     void comm_down();
     void comm_drop();
     void comm_hold();
+    void comm_reset();
+    void comm_help();
 } // namespace gm

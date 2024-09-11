@@ -5,22 +5,21 @@
 #include "control.h"
 #include "game.h"
 #include "tetromino.h"
+#include "window.h"
 
 void init()
 {
+#ifdef _WIN32
+        system("chcp 65001");
+#endif
+
     tc::hide_cursor();
 
     gm::init();
     gm::start_listener();
 
-    setbuf(stdout, nullptr);
-
     tc::clean_screen();
-    dw::window(1, 1, 9, 6, "Hold");
-    dw::window(1, 10, 12, 22, "Tetriz");
-    dw::window(7, 1, 9, 16, "Status");
-    dw::window(19, 22, 8, 4, "Info");
-    dw::window(1, 22, 8, 18, "Next");
+    ui::show_window();
 }
 
 void loop()
@@ -29,31 +28,10 @@ void loop()
     while (gm::running)
     {
         gm::process();
+        ui::show_status();
+        ui::show_game();
+        ui::show_help_info();
 
-        tc::cursor_move_to(10, 4);
-        std::cout << "FPS : " << ut::fps();
-        tc::cursor_move_to(12, 4);
-        std::cout << "Level : " << gm::level;
-        tc::cursor_move_to(13, 4);
-        std::cout << "Score : " << gm::score;
-        tc::cursor_move_to(14, 4);
-        std::cout << "Lines : " << gm::lines;
-
-        if (gm::ending)
-        {
-            dw::window(9, 12, 8, 3, "");
-            tc::cursor_move_to(10, ut::b2c(13));
-            tc::set_fore_color((int)Color::Red);
-            std::cout << " GAME OVER!";
-        }
-
-        dw::frame(gm::render_frame, 2, 11);
-        dw::next(gm::next, 2, 23);
-        dw::hold(gm::hold_piece, 2, 2);
-
-        tc::reset_color();
-
-        std::cout << std::flush;
         std::this_thread::sleep_for(10ms);
     }
 }
@@ -61,12 +39,7 @@ void loop()
 void exit()
 {
     gm::quit();
-    tc::show_cursor();
-    tc::reset_color();
-    tc::clean_screen();
-    tc::cursor_move_to(1, 1);
-    tc::set_fore_color(9);
-    std::cout << "Bye!" << std::endl;
+    ui::show_exit();
 };
 
 int main(void)

@@ -7,6 +7,8 @@ namespace gm
     bool locking;
     bool holding;
     bool ending;
+    bool resetting;
+    bool helping;
 
     Piece one_piece;
 
@@ -30,6 +32,8 @@ namespace gm
         locking = false;
         holding = false;
         ending = false;
+        resetting = false;
+        helping = false;
 
         score = 0;
         // level = 1;
@@ -69,6 +73,7 @@ namespace gm
 
                 locking = false;
                 holding = false;
+                resetting = false;
             }
             else
             {
@@ -122,7 +127,7 @@ namespace gm
     {
         int cnt = 0;
 
-        for (auto it = playfield.begin(); it != playfield.end(); it++)
+        for (auto it = playfield.begin(); it != playfield.end();)
         {
             bool full = true;
             for (auto cell : (*it))
@@ -137,10 +142,13 @@ namespace gm
             {
                 // 满行时进行消行操作
                 it = playfield.erase(it);
-                playfield.emplace_back(std::vector<int>(it->size(), 0));
-                it--;
+                playfield.push_back(std::vector<int>(it->size(), 0));
                 cnt++;
                 lines++;
+            }
+            else
+            {
+                ++it;
             }
         }
 
@@ -185,7 +193,7 @@ namespace gm
     void load()
     {
         std::ifstream fs("tetriz.map");
-        assert(fs.is_open());
+        if (!fs.is_open()) return;
         std::string line;
 
         for (auto &row : playfield | std::ranges::views::take(PLY_FLD_EX_ROWS) | std::ranges::views::reverse)
@@ -233,6 +241,18 @@ namespace gm
         // duration = (0.8 - ((level - 1) * 0.007)) ^ (level - 1)
         tmp_time = (int)(pow((0.8 - ((level - 1) * 0.007)), (level - 1)) * 1000);
         duration = std::chrono::milliseconds(tmp_time);
+    }
+
+    void reset()
+    {
+        init();
+        resetting = true;
+    }
+
+    void help()
+    {
+        helping = !helping;
+        resetting = !helping;
     }
 
     void drop()
