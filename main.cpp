@@ -32,6 +32,20 @@ void loop()
 
         tc::cursor_move_to(10, 4);
         std::cout << "FPS : " << ut::fps();
+        tc::cursor_move_to(12, 4);
+        std::cout << "Level : " << gm::level;
+        tc::cursor_move_to(13, 4);
+        std::cout << "Score : " << gm::score;
+        tc::cursor_move_to(14, 4);
+        std::cout << "Lines : " << gm::lines;
+
+        if (gm::ending)
+        {
+            dw::window(9, 12, 8, 3, "");
+            tc::cursor_move_to(10, ut::b2c(13));
+            tc::set_fore_color((int)Color::Red);
+            std::cout << " GAME OVER!";
+        }
 
         dw::frame(gm::render_frame, 2, 11);
         dw::next(gm::next, 2, 23);

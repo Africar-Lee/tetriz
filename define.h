@@ -14,6 +14,7 @@
 #include <assert.h>
 #include <ranges>
 #include <fstream>
+#include <cmath>
 
 #define KEY_Q       'q'
 #define KEY_W       'w'

@@ -13,6 +13,8 @@ namespace gm
 
     extern bool holding; // 暂存标识
 
+    extern bool ending; // 终结标识
+
     extern Piece one_piece; // 当前在下落的块
 
     // playfield[x][y], x = 0-9, y = 0-21
@@ -23,6 +25,10 @@ namespace gm
     extern std::queue<Tetromino_axis> next; // 预览队列
 
     extern Tetromino_axis hold_piece; // 暂存块
+
+    extern int score; // 分数
+    extern int level; // 等级
+    extern int lines; // 消去的行数
 
     /*********************************
      * Logic func in game
@@ -56,6 +62,8 @@ namespace gm
     void load(); // 载入预设地图
 
     void hold(); // 暂存游戏
+
+    void levelup(); // 升级
 
     //---------- tool --------------
     void merge(Matrix &m, const Piece &p);

@@ -6,9 +6,10 @@ namespace gm
     bool running;
     bool locking;
     bool holding;
+    bool ending;
 
     Piece one_piece;
-    
+
     Matrix playfield;
     Matrix render_frame;
 
@@ -18,6 +19,9 @@ namespace gm
 
     std::chrono::microseconds duration;
 
+    int score, level, lines;
+    const int score_table[5] = {0, 100, 300, 500, 800};
+
     void init()
     {
         srand(std::time(0));
@@ -25,8 +29,13 @@ namespace gm
         running = true;
         locking = false;
         holding = false;
+        ending = false;
 
-        duration = 500ms;
+        score = 0;
+        // level = 1;
+        lines = 0;
+        levelup();
+        // duration = 500ms;
 
         playfield = Matrix(PLY_FLD_ROWS, std::vector<int>(PLY_FLD_COLS, 0));
         load();
@@ -39,6 +48,8 @@ namespace gm
 
     void process()
     {
+        if (ending) return;
+
         render();
         if (ut::timer(duration))
         {
@@ -50,8 +61,9 @@ namespace gm
             {
                 // 锁定
                 lock();
-                // 消行
+                // 消行并升级
                 clear();
+                levelup();
 
                 one_piece = pick(); // 前述锁定消行逻辑已完成，生成新piece
 
@@ -89,6 +101,13 @@ namespace gm
         assert(!next.empty());
         Piece p(next.front(), 4, 20, 0);
         next.pop();
+
+        if (!p.test(4, 20))
+        {
+            // game over
+            ending = true;
+        }
+
         preview();
 
         return std::move(p);
@@ -101,6 +120,8 @@ namespace gm
 
     void clear()
     {
+        int cnt = 0;
+
         for (auto it = playfield.begin(); it != playfield.end(); it++)
         {
             bool full = true;
@@ -118,8 +139,12 @@ namespace gm
                 it = playfield.erase(it);
                 playfield.emplace_back(std::vector<int>(it->size(), 0));
                 it--;
+                cnt++;
+                lines++;
             }
         }
+
+        score += score_table[cnt] * level;
     }
 
     void rotate(int direct)
@@ -139,7 +164,8 @@ namespace gm
 
     void down()
     {
-        one_piece.down();
+        if (one_piece.down())
+            score += 1;
     }
 
     void preview()
@@ -162,10 +188,10 @@ namespace gm
         assert(fs.is_open());
         std::string line;
 
-        for (auto& row:playfield | std::ranges::views::take(PLY_FLD_EX_ROWS) | std::ranges::views::reverse)
+        for (auto &row : playfield | std::ranges::views::take(PLY_FLD_EX_ROWS) | std::ranges::views::reverse)
         {
             getline(fs, line);
-            for (auto i:iota(0, PLY_FLD_COLS))
+            for (auto i : iota(0, PLY_FLD_COLS))
             {
                 if (line[i] == '1')
                 {
@@ -181,7 +207,8 @@ namespace gm
     // 3. 每回合只允许使用暂存一次
     void hold()
     {
-        if (holding) return;
+        if (holding)
+            return;
 
         if (hold_piece.empty())
         {
@@ -198,10 +225,20 @@ namespace gm
         holding = true;
     }
 
+    void levelup()
+    {
+        int tmp_time = 0;
+
+        level = lines / 10 + 1;
+        // duration = (0.8 - ((level - 1) * 0.007)) ^ (level - 1)
+        tmp_time = (int)(pow((0.8 - ((level - 1) * 0.007)), (level - 1)) * 1000);
+        duration = std::chrono::milliseconds(tmp_time);
+    }
+
     void drop()
     {
         while (one_piece.down())
-            ;
+            score += 2;
         locking = true;
     }
 
